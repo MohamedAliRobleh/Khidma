@@ -71,16 +71,16 @@ export default function WorkerCard({ worker, index = 0 }) {
               <div className="mb-2 d-flex align-items-center gap-2">
                 <StarRating rating={avg} showText />
                 <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                  ({worker.reviews.length} avis)
+                  ({worker.reviews?.length} avis)
                 </span>
               </div>
             )}
 
             <div className="d-flex flex-wrap gap-1 mb-3">
-              {worker.tasks.slice(0, 3).map(slug => (
+              {worker.tasks?.slice(0, 3).map(slug => (
                 <TaskBadge key={slug} slug={slug} />
               ))}
-              {worker.tasks.length > 3 && (
+              {worker.tasks?.length > 3 && (
                 <span className="badge rounded-pill"
                   style={{ background: 'var(--bg-secondary)', color: 'var(--text-secondary)', fontSize: '0.78rem' }}>
                   +{worker.tasks.length - 3}

@@ -61,7 +61,7 @@ export default function WorkerProfileHeader({ worker }) {
           <div className="d-flex align-items-center gap-2 mb-3">
             <StarRating rating={avg} size={20} showText />
             <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-              ({worker.reviews.length} avis)
+              ({worker.reviews?.length} avis)
             </span>
           </div>
         )}
