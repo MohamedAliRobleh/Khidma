@@ -56,6 +56,8 @@ export default function AdminWorkers() {
     } else {
       await createWorker(data)
     }
+    setShowForm(false)
+    setEditing(null)
   }
 
   return (
