@@ -1,5 +1,5 @@
 // src/hooks/useWorker.js
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 export function useWorker(id) {
   const [worker, setWorker] = useState(null)
@@ -26,12 +26,15 @@ export function useWorker(id) {
     return () => { cancelled = true }
   }, [id])
 
+  const mountedRef = useRef(true)
+  useEffect(() => () => { mountedRef.current = false }, [])
+
   const refetch = () => {
     setLoading(true)
     fetch(`/api/workers/${id}`)
       .then(r => r.json())
-      .then(data => { setWorker(data); setLoading(false) })
-      .catch(err => { setError(err.message); setLoading(false) })
+      .then(data => { if (mountedRef.current) { setWorker(data); setLoading(false) } })
+      .catch(err => { if (mountedRef.current) { setError(err.message); setLoading(false) } })
   }
 
   return { worker, loading, error, refetch }
