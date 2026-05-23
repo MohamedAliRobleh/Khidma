@@ -11,8 +11,8 @@ export default async function handler(req, res) {
   if (!workerId || !clientName || rating == null) {
     return res.status(400).json({ error: 'workerId, clientName et rating sont requis' })
   }
-  const r = parseInt(rating)
-  if (r < 1 || r > 5) {
+  const r = Number(rating)
+  if (!Number.isInteger(r) || r < 1 || r > 5) {
     return res.status(400).json({ error: 'La note doit être entre 1 et 5' })
   }
 

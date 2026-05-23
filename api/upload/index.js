@@ -17,10 +17,14 @@ export default async function handler(req, res) {
   const { data } = req.body
   if (!data) return res.status(400).json({ error: 'Image data manquante' })
 
-  const result = await cloudinary.uploader.upload(data, {
-    folder: 'khidma',
-    transformation: [{ width: 400, height: 400, crop: 'fill', gravity: 'face' }],
-  })
-
-  res.json({ url: result.secure_url, publicId: result.public_id })
+  try {
+    const result = await cloudinary.uploader.upload(data, {
+      folder: 'khidma',
+      transformation: [{ width: 400, height: 400, crop: 'fill', gravity: 'face' }],
+    })
+    res.json({ url: result.secure_url, publicId: result.public_id })
+  } catch (err) {
+    console.error('Cloudinary upload error:', err)
+    res.status(500).json({ error: "Erreur lors de l'upload de l'image" })
+  }
 }
