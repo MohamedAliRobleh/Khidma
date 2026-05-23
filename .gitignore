@@ -3,3 +3,5 @@ dist/
 .env
 .superpowers/
 .vercel/
+
+/src/generated/prisma
