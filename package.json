@@ -13,8 +13,7 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
-    "@popperjs/core": "^2.11.8",
-    "@prisma/client": "^5.22.0",
+"@prisma/client": "^5.22.0",
     "bootstrap": "^5.3.8",
     "cloudinary": "^2.10.0",
     "framer-motion": "^11.18.2",
