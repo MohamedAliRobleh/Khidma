@@ -16,8 +16,13 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'La note doit être entre 1 et 5' })
   }
 
-  const review = await prisma.review.create({
-    data: { workerId, clientName, rating: r, comment: comment || null },
-  })
-  res.status(201).json(review)
+  try {
+    const review = await prisma.review.create({
+      data: { workerId, clientName, rating: r, comment: comment || null },
+    })
+    res.status(201).json(review)
+  } catch (err) {
+    console.error('Review create error:', err)
+    res.status(500).json({ error: 'Erreur serveur' })
+  }
 }
