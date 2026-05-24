@@ -9,6 +9,7 @@ import { formatDate } from '../utils/formatDate'
 
 function WorkerHistoryCard({ entry, onMarkPast, onToggleAlert, hasAlert }) {
   const w = entry.worker
+  if (!w) return null
   const avg = w.reviews?.length
     ? w.reviews.reduce((s, r) => s + r.rating, 0) / w.reviews.length
     : 0
@@ -102,7 +103,9 @@ export default function EmployerDashboard() {
     Promise.all([fetchHistory(), fetchAlerts()])
       .then(([h, a]) => { setHistory(h); setAlerts(a) })
       .finally(() => setLoading(false))
-  }, [employer])
+    // fetchHistory/fetchAlerts depend on employer via their own useCallback — adding them here would double-invoke
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [employer, navigate])
 
   if (!employer) return null
 
