@@ -88,21 +88,30 @@ export default function WorkerProfile() {
   const { worker, loading, error, refetch } = useWorker(id)
   const [showModal, setShowModal] = useState(false)
 
-  const { employer, addToHistory, toggleAlert, fetchAlerts } = useEmployer()
+  const { employer, addToHistory, toggleAlert, fetchAlerts, fetchHistory } = useEmployer()
   const [alerts, setAlerts] = useState([])
-  const [inHistory, setInHistory] = useState(false)
+  const [history, setHistory] = useState([])
 
   useEffect(() => {
     if (!employer || !worker) return
-    fetchAlerts().then(a => setAlerts(a))
+    Promise.all([fetchAlerts(), fetchHistory()])
+      .then(([a, h]) => {
+        setAlerts(a)
+        setHistory(h)
+      })
+      .catch(() => {})
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [employer, worker, fetchAlerts])
+  }, [employer, worker, fetchAlerts, fetchHistory])
 
   const hasAlert = alerts.some(a => a.workerId === id)
+  const inHistory = history.some(entry => entry.workerId === id)
 
   const handleAddToHistory = async () => {
-    await addToHistory(id)
-    setInHistory(true)
+    const ok = await addToHistory(id)
+    if (ok) {
+      const h = await fetchHistory()
+      setHistory(h)
+    }
   }
   const handleToggleAlert = async () => {
     await toggleAlert(id, hasAlert)

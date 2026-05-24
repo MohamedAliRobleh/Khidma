@@ -26,7 +26,7 @@ export default async function handler(req, res) {
     const worker = await prisma.worker.create({
       data: {
         ...pickApplyFields(req.body),
-        status: 'ACTIVE',
+        status: 'PENDING',
         selfRegistered: true,
         verified: false,
       },
