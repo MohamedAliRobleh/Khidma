@@ -49,6 +49,7 @@ export default function AdminLogin() {
               onChange={e => setPassword(e.target.value)}
               required
               autoFocus
+              autoComplete="current-password"
               style={{ borderRadius: 10, padding: '0.7rem 1rem' }}
             />
           </div>

@@ -84,11 +84,13 @@ export default function EmployerAuth() {
               <div className="mb-3">
                 <label className="form-label small fw-bold">Email *</label>
                 <input className="form-control" type="email" style={{ borderRadius: 10 }}
+                  autoComplete="email"
                   value={form.email} onChange={set('email')} required />
               </div>
               <div className="mb-4">
                 <label className="form-label small fw-bold">Mot de passe *</label>
                 <input className="form-control" type="password" style={{ borderRadius: 10 }}
+                  autoComplete={tab === 'login' ? 'current-password' : 'new-password'}
                   value={form.password} onChange={set('password')} required minLength={6} />
               </div>
 

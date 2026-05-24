@@ -51,19 +51,6 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <NavLink to="/rejoindre"
-            className="btn btn-outline-primary-custom ms-2"
-            style={({ isActive }) => ({
-              whiteSpace: 'nowrap',
-              borderRadius: 50,
-              padding: '0.55rem 1.2rem',
-              fontWeight: 700,
-              color: isActive ? 'var(--primary-dark)' : 'var(--primary)',
-              borderColor: 'var(--primary)',
-            })}
-          >
-            Je m'inscris
-          </NavLink>
           <NavLink to="/compte"
             className="btn btn-primary-custom ms-2"
             style={({ isActive }) => ({
