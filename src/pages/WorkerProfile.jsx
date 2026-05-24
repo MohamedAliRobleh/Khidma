@@ -296,7 +296,7 @@ export default function WorkerProfile() {
               {!employer && (
                 <div className="mt-3 pt-3 text-center" style={{ borderTop: '1px solid var(--border)' }}>
                   <Link to="/compte" style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
-                    Créer un compte employeur pour suivre cette travailleuse
+                    Créer un compte employeur pour suivre ce{worker.gender === 'M' ? ' travailleur' : 'tte travailleuse'}
                   </Link>
                 </div>
               )}

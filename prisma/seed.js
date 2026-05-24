@@ -306,6 +306,7 @@ const workers = [
   {
     fullName: 'Kadar Ali Mohamed',
     phone: '+25377100009',
+    gender: 'M',
     age: 38,
     bio: "Gardien expérimenté avec 10 ans de service dans des résidences privées et des entreprises à Djibouti-Ville. Sérieux, discret et vigilant 24h/24. Je propose aussi le lavage de véhicules le matin. Permis de conduire valide.",
     neighborhood: 'Plateau du Serpent',
@@ -327,6 +328,7 @@ const workers = [
   {
     fullName: 'Mahad Hassan Aden',
     phone: '+25377100010',
+    gender: 'M',
     age: 31,
     bio: "Gardien de nuit et de jour selon les besoins. Je travaille avec rigueur et discrétion. Habitué des quartiers résidentiels, je veille à la sécurité des familles et des biens. Disponible immédiatement.",
     neighborhood: 'Balbala',
@@ -348,6 +350,7 @@ const workers = [
   {
     fullName: 'Tolera Gemechu',
     phone: '+25177200007',
+    gender: 'M',
     age: 42,
     bio: "Gardien avec 12 ans d'expérience à Djibouti dans des villas et ambassades. Ponctuel, fiable, et formé aux premiers secours. Je parle Oromo, Amharique et un peu de Somali. Recherche poste interne dans une famille ou entreprise sérieuse.",
     neighborhood: 'Centre-ville',
@@ -370,6 +373,7 @@ const workers = [
   {
     fullName: 'Abebe Diriba',
     phone: '+25177200008',
+    gender: 'M',
     age: 26,
     bio: "Spécialisé dans le lavage et l'entretien de véhicules, je travaille avec soin et rapidité. Je me déplace à domicile avec mon matériel. Je propose aussi le jardinage. Disponible en demi-journée ou journée complète.",
     neighborhood: 'Boulaos',
@@ -391,6 +395,7 @@ const workers = [
   {
     fullName: 'Gutu Bekele',
     phone: '+25177200009',
+    gender: 'M',
     age: 34,
     bio: "Gardien et laveur de voiture depuis 7 ans à Djibouti. Je m'occupe de la sécurité des locaux le soir et du lavage des véhicules le matin. Autonome, calme et de confiance. Références disponibles sur demande.",
     neighborhood: 'Arhiba',

@@ -26,6 +26,7 @@ model Worker {
   status           String              @default("ACTIVE")
   selfRegistered   Boolean             @default(false)
   pinHash          String?
+  gender           String              @default("F")
   experience       Int?
   languageLevels   Json                @default("[]")
   tasks            String[]            @default([])

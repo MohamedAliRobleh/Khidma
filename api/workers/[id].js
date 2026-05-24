@@ -5,7 +5,7 @@ import { hashPin, requireWorker } from '../../lib/workerAuth.js'
 import { prisma } from '../../lib/prisma.js'
 
 const WORKER_FIELDS = [
-  'fullName', 'phone', 'age', 'photoUrl', 'cloudinaryId', 'bio',
+  'fullName', 'phone', 'age', 'gender', 'photoUrl', 'cloudinaryId', 'bio',
   'city', 'neighborhood', 'available', 'availableFrom', 'verified',
   'verifiedSkills', 'featured', 'status', 'experience', 'languageLevels',
   'tasks', 'priceFdj', 'workType', 'schedule', 'employerProvides',
