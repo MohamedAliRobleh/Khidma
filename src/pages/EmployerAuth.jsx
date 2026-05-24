@@ -1,5 +1,5 @@
 // src/pages/EmployerAuth.jsx
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useEmployer } from '../hooks/useEmployer'
@@ -9,6 +9,15 @@ export default function EmployerAuth() {
   const { login, register, loading, error } = useEmployer()
   const [tab, setTab] = useState('login')
   const [form, setForm] = useState({ email: '', password: '', name: '', phone: '' })
+  const [displayError, setDisplayError] = useState('')
+
+  useEffect(() => { setDisplayError(error) }, [error])
+
+  const switchTab = (t) => {
+    setTab(t)
+    setForm({ email: '', password: '', name: '', phone: '' })
+    setDisplayError('')
+  }
 
   const set = field => e => setForm(f => ({ ...f, [field]: e.target.value }))
 
@@ -49,7 +58,7 @@ export default function EmployerAuth() {
                   color: tab === t ? '#fff' : 'var(--text-secondary)',
                   fontWeight: tab === t ? 700 : 400,
                 }}
-                onClick={() => setTab(t)}
+                onClick={() => switchTab(t)}
               >
                 {t === 'login' ? 'Connexion' : 'Créer un compte'}
               </button>
@@ -83,9 +92,9 @@ export default function EmployerAuth() {
                   value={form.password} onChange={set('password')} required minLength={6} />
               </div>
 
-              {error && (
+              {displayError && (
                 <div className="alert alert-danger py-2" style={{ borderRadius: 10, fontSize: '0.9rem' }}>
-                  {error}
+                  {displayError}
                 </div>
               )}
 

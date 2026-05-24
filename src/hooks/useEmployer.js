@@ -74,50 +74,70 @@ export function useEmployer() {
 
   const addToHistory = useCallback(async (workerId) => {
     if (!employer) return false
-    const res = await fetch(`/api/employers/${employer.id}/history`, {
-      method: 'POST',
-      headers: authHeaders(),
-      body: JSON.stringify({ workerId }),
-    })
-    return res.ok
+    try {
+      const res = await fetch(`/api/employers/${employer.id}/history`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ workerId }),
+      })
+      return res.ok
+    } catch {
+      return false
+    }
   }, [employer])
 
   const markPast = useCallback(async (workerId) => {
     if (!employer) return false
-    const res = await fetch(`/api/employers/${employer.id}/history`, {
-      method: 'PATCH',
-      headers: authHeaders(),
-      body: JSON.stringify({ workerId, status: 'PAST' }),
-    })
-    return res.ok
+    try {
+      const res = await fetch(`/api/employers/${employer.id}/history`, {
+        method: 'PATCH',
+        headers: authHeaders(),
+        body: JSON.stringify({ workerId, status: 'PAST' }),
+      })
+      return res.ok
+    } catch {
+      return false
+    }
   }, [employer])
 
   const toggleAlert = useCallback(async (workerId, hasAlert) => {
     if (!employer) return false
-    const res = await fetch(`/api/employers/${employer.id}/alerts`, {
-      method: hasAlert ? 'DELETE' : 'POST',
-      headers: authHeaders(),
-      body: JSON.stringify({ workerId }),
-    })
-    return res.ok
+    try {
+      const res = await fetch(`/api/employers/${employer.id}/alerts`, {
+        method: hasAlert ? 'DELETE' : 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ workerId }),
+      })
+      return res.ok
+    } catch {
+      return false
+    }
   }, [employer])
 
   const fetchHistory = useCallback(async () => {
     if (!employer) return []
-    const res = await fetch(`/api/employers/${employer.id}/history`, {
-      headers: authHeaders(),
-    })
-    if (!res.ok) return []
-    return res.json()
+    try {
+      const res = await fetch(`/api/employers/${employer.id}/history`, {
+        headers: authHeaders(),
+      })
+      if (!res.ok) return []
+      return res.json()
+    } catch {
+      return []
+    }
   }, [employer])
 
   const fetchAlerts = useCallback(async () => {
     if (!employer) return []
-    const res = await fetch(`/api/employers/${employer.id}/alerts`, {
-      headers: authHeaders(),
-    })
-    if (!res.ok) return []
-    return res.json()
+    try {
+      const res = await fetch(`/api/employers/${employer.id}/alerts`, {
+        headers: authHeaders(),
+      })
+      if (!res.ok) return []
+      return res.json()
+    } catch {
+      return []
+    }
   }, [employer])
 
   return {
