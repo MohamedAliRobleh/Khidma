@@ -101,12 +101,15 @@ export default function WorkerApply() {
     return (
       <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
         <div className="container text-center py-5" style={{ maxWidth: 480 }}>
-          <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🎉</div>
-          <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800 }}>Profil créé !</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-            Votre profil est maintenant en ligne. L'équipe Khidma le vérifiera prochainement.
+          <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>✅</div>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800 }}>Candidature envoyée !</h2>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+            Votre profil a bien été reçu par l'équipe Khidma.
           </p>
-          <Link to="/bonnes" className="btn btn-primary-custom">Voir les profils</Link>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '0.92rem' }}>
+            Il sera examiné et publié prochainement. Vous serez contacté(e) par téléphone.
+          </p>
+          <Link to="/" className="btn btn-primary-custom">Retour à l'accueil</Link>
         </div>
       </div>
     )

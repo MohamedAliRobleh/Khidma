@@ -54,7 +54,7 @@ export function useAdmin() {
 
   const fetchReviews = useCallback(async () => {
     setLoading(true)
-    const res = await fetch('/api/workers?limit=100')
+    const res = await fetch('/api/workers?limit=100', { headers: authHeaders() })
     const data = await res.json()
     const allReviews = data.workers.flatMap(w =>
       (w.reviews || []).map(r => ({ ...r, workerName: w.fullName }))
@@ -99,9 +99,9 @@ export function useAdmin() {
     await fetchWorkers()
   }
 
-  const deleteReview = async () => {
+  const deleteReview = useCallback(async () => {
     await fetchReviews()
-  }
+  }, [fetchReviews])
 
   const toggleField = async (id, field, value) => {
     await fetch(`/api/workers/${id}`, {
