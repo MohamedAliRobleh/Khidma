@@ -77,13 +77,17 @@ export default function Navbar() {
           >
             Espace employeur
           </NavLink>
-          <Link
-            to="/bonnes"
+          <NavLink to="/rejoindre"
             className="btn btn-outline-secondary ms-2"
-            style={{ whiteSpace: 'nowrap', borderRadius: 50 }}
+            style={({ isActive }) => ({
+              whiteSpace: 'nowrap',
+              borderRadius: 50,
+              color: isActive ? 'var(--secondary)' : 'var(--text-secondary)',
+              borderColor: 'var(--border)',
+            })}
           >
-            Vous cherchez du travail ?
-          </Link>
+            Je cherche du travail
+          </NavLink>
         </div>
       </div>
     </nav>

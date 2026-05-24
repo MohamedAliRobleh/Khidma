@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vercel dev",
     "dev:vite": "vite",
-    "build": "prisma generate && vite build",
+    "postinstall": "prisma generate",
+    "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
