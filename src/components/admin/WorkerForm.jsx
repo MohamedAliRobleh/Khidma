@@ -1,11 +1,13 @@
 // src/components/admin/WorkerForm.jsx
 import { useState } from 'react'
 import PhotoUpload from './PhotoUpload'
-import { TASKS, NEIGHBORHOODS, WORK_TYPES, SCHEDULE_OPTIONS, EMPLOYER_PROVIDES, LANGUAGES } from '../../utils/constants'
+import { TASKS, NEIGHBORHOODS, WORK_TYPES, SCHEDULE_OPTIONS, EMPLOYER_PROVIDES, LANGUAGES, LANGUAGE_LEVELS, VERIFIED_SKILLS } from '../../utils/constants'
 
 const EMPTY = {
   fullName: '', phone: '', age: '', bio: '', neighborhood: '', experience: '',
-  languages: ['Français', 'Somali'],
+  languageLevels: [],
+  verifiedSkills: [],
+  availableFrom: null,
   tasks: [], workType: [], schedule: [], employerProvides: [],
   priceFdj: '', available: true, verified: false, featured: false,
   photoUrl: '', cloudinaryId: '',
@@ -181,19 +183,89 @@ export default function WorkerForm({ initial, onSave, onClose }) {
                   </div>
                 </div>
 
-                {/* Languages */}
+                {/* Language levels */}
                 <div className="col-12">
-                  <label className="form-label small fw-bold">Langues</label>
-                  <div className="d-flex flex-wrap gap-2">
-                    {LANGUAGES.map(lang => (
-                      <div key={lang} className="form-check">
-                        <input className="form-check-input" type="checkbox" id={`lang-${lang}`}
-                          checked={form.languages.includes(lang)}
-                          onChange={() => set('languages', toggleArr(form.languages, lang))} />
-                        <label className="form-check-label small" htmlFor={`lang-${lang}`}>{lang}</label>
+                  <label className="form-label small fw-bold">Langues et niveaux</label>
+                  {LANGUAGES.map(lang => {
+                    const entry = (form.languageLevels || []).find(ll => ll.language === lang)
+                    return (
+                      <div key={lang} className="d-flex align-items-center gap-2 mb-2">
+                        <input
+                          type="checkbox"
+                          id={`lang-${lang}`}
+                          checked={!!entry}
+                          onChange={e => {
+                            const cur = form.languageLevels || []
+                            setForm(f => ({
+                              ...f,
+                              languageLevels: e.target.checked
+                                ? [...cur, { language: lang, level: 'intermediaire' }]
+                                : cur.filter(ll => ll.language !== lang),
+                            }))
+                          }}
+                          style={{ accentColor: 'var(--primary)' }}
+                        />
+                        <label htmlFor={`lang-${lang}`} className="small" style={{ minWidth: 80 }}>{lang}</label>
+                        {entry && (
+                          <select
+                            className="form-select form-select-sm"
+                            style={{ maxWidth: 140, borderRadius: 8 }}
+                            value={entry.level}
+                            onChange={e => setForm(f => ({
+                              ...f,
+                              languageLevels: (f.languageLevels || []).map(ll =>
+                                ll.language === lang ? { ...ll, level: e.target.value } : ll
+                              ),
+                            }))}
+                          >
+                            {LANGUAGE_LEVELS.map(l => <option key={l.slug} value={l.slug}>{l.label}</option>)}
+                          </select>
+                        )}
                       </div>
-                    ))}
+                    )
+                  })}
+                </div>
+
+                {/* Verified skills */}
+                <div className="col-12">
+                  <label className="form-label small fw-bold">Compétences vérifiées</label>
+                  <div className="d-flex flex-wrap gap-2">
+                    {VERIFIED_SKILLS.map(s => {
+                      const checked = (form.verifiedSkills || []).includes(s.slug)
+                      return (
+                        <button
+                          key={s.slug} type="button"
+                          className="btn btn-sm"
+                          style={{
+                            borderRadius: 20,
+                            border: `2px solid ${checked ? 'var(--primary)' : 'var(--border)'}`,
+                            background: checked ? 'var(--primary)' : 'transparent',
+                            color: checked ? '#fff' : 'var(--text-primary)',
+                          }}
+                          onClick={() => setForm(f => ({
+                            ...f,
+                            verifiedSkills: checked
+                              ? (f.verifiedSkills || []).filter(x => x !== s.slug)
+                              : [...(f.verifiedSkills || []), s.slug],
+                          }))}
+                        >
+                          {s.icon} {s.label} {checked ? '✓' : ''}
+                        </button>
+                      )
+                    })}
                   </div>
+                </div>
+
+                {/* Available from */}
+                <div className="col-12">
+                  <label className="form-label small fw-bold">Disponible à partir du</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    style={{ borderRadius: 10, maxWidth: 200 }}
+                    value={form.availableFrom ? form.availableFrom.slice(0, 10) : ''}
+                    onChange={e => setForm(f => ({ ...f, availableFrom: e.target.value || null }))}
+                  />
                 </div>
 
                 {/* Flags */}

@@ -16,14 +16,41 @@ export function useAdmin() {
   const [workers, setWorkers] = useState([])
   const [reviews, setReviews] = useState([])
   const [loading, setLoading] = useState(false)
+  const [pendingWorkers, setPendingWorkers] = useState([])
 
   const fetchWorkers = useCallback(async () => {
     setLoading(true)
-    const res = await fetch('/api/workers?limit=100')
+    const res = await fetch('/api/workers?limit=100', { headers: authHeaders() })
     const data = await res.json()
     setWorkers(data.workers)
     setLoading(false)
   }, [])
+
+  const fetchPending = useCallback(async () => {
+    const res = await fetch('/api/workers?status=PENDING', { headers: authHeaders() })
+    if (!res.ok) return
+    const data = await res.json()
+    setPendingWorkers(data.workers)
+  }, [])
+
+  const approveWorker = useCallback(async id => {
+    await fetch(`/api/workers/${id}`, {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify({ status: 'ACTIVE', verified: true }),
+    })
+    await Promise.all([fetchWorkers(), fetchPending()])
+  }, [fetchWorkers, fetchPending])
+
+  const rejectWorker = useCallback(async id => {
+    if (!confirm('Rejeter ce profil ?')) return
+    await fetch(`/api/workers/${id}`, {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify({ status: 'REJECTED' }),
+    })
+    await fetchPending()
+  }, [fetchPending])
 
   const fetchReviews = useCallback(async () => {
     setLoading(true)
@@ -86,8 +113,9 @@ export function useAdmin() {
   }
 
   return {
-    workers, reviews, loading,
-    fetchWorkers, fetchReviews,
+    workers, reviews, loading, pendingWorkers,
+    fetchWorkers, fetchReviews, fetchPending,
     createWorker, updateWorker, deleteWorker, deleteReview, toggleField,
+    approveWorker, rejectWorker,
   }
 }

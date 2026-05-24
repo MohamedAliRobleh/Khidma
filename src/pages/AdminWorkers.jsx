@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAdmin } from '../hooks/useAdmin'
 import AdminTable from '../components/admin/AdminTable'
 import WorkerForm from '../components/admin/WorkerForm'
+import { formatDate } from '../utils/formatDate'
 
 function AdminNav({ active }) {
   const navigate = useNavigate()
@@ -31,12 +32,14 @@ function AdminNav({ active }) {
 }
 
 export default function AdminWorkers() {
-  const { workers, loading, fetchWorkers, createWorker, updateWorker, deleteWorker, toggleField } = useAdmin()
+  const { workers, loading, fetchWorkers, createWorker, updateWorker, deleteWorker, toggleField,
+          pendingWorkers, fetchPending, approveWorker, rejectWorker } = useAdmin()
   const [showForm, setShowForm]   = useState(false)
   const [editing, setEditing]     = useState(null)
   const [search, setSearch]       = useState('')
+  const [tab, setTab]             = useState('active')
 
-  useEffect(() => { fetchWorkers() }, [fetchWorkers])
+  useEffect(() => { fetchWorkers(); fetchPending() }, [fetchWorkers, fetchPending])
 
   const filtered = workers.filter(w =>
     w.fullName.toLowerCase().includes(search.toLowerCase()) ||
@@ -99,11 +102,29 @@ export default function AdminWorkers() {
           </button>
         </div>
 
+        {/* Tab switcher */}
+        <div className="d-flex gap-2 mb-3">
+          <button
+            className="btn btn-sm"
+            style={{ borderRadius: 20, border: `2px solid ${tab === 'active' ? 'var(--primary)' : 'var(--border)'}`, background: tab === 'active' ? 'var(--primary)' : 'transparent', color: tab === 'active' ? '#fff' : 'var(--text-secondary)', fontWeight: tab === 'active' ? 700 : 400 }}
+            onClick={() => setTab('active')}
+          >
+            Actives ({workers.length})
+          </button>
+          <button
+            className="btn btn-sm"
+            style={{ borderRadius: 20, border: `2px solid ${tab === 'pending' ? '#f59e0b' : 'var(--border)'}`, background: tab === 'pending' ? '#f59e0b' : 'transparent', color: tab === 'pending' ? '#fff' : 'var(--text-secondary)', fontWeight: tab === 'pending' ? 700 : 400 }}
+            onClick={() => setTab('pending')}
+          >
+            En attente ({pendingWorkers.length})
+          </button>
+        </div>
+
         {loading ? (
           <div className="text-center py-5">
             <div className="spinner-border" style={{ color: 'var(--primary)' }} />
           </div>
-        ) : (
+        ) : tab === 'active' ? (
           <div className="card-khidma">
             <AdminTable
               workers={filtered}
@@ -111,6 +132,40 @@ export default function AdminWorkers() {
               onDelete={deleteWorker}
               onToggle={toggleField}
             />
+          </div>
+        ) : (
+          <div className="card-khidma">
+            {pendingWorkers.length === 0 ? (
+              <div className="text-center py-4" style={{ color: 'var(--text-secondary)' }}>
+                Aucun profil en attente
+              </div>
+            ) : (
+              pendingWorkers.map(w => (
+                <div key={w.id} className="d-flex align-items-center justify-content-between p-3"
+                  style={{ borderBottom: '1px solid var(--border)' }}>
+                  <div>
+                    <div className="fw-bold">{w.fullName}</div>
+                    <div className="small" style={{ color: 'var(--text-secondary)' }}>
+                      {w.phone} · {w.neighborhood} · Inscrit le {formatDate(w.createdAt)}
+                    </div>
+                  </div>
+                  <div className="d-flex gap-2">
+                    <button className="btn btn-sm btn-success" style={{ borderRadius: 8 }}
+                      onClick={() => approveWorker(w.id)}>
+                      ✓ Approuver
+                    </button>
+                    <button className="btn btn-sm btn-outline-danger" style={{ borderRadius: 8 }}
+                      onClick={() => rejectWorker(w.id)}>
+                      Rejeter
+                    </button>
+                    <button className="btn btn-sm btn-outline-secondary" style={{ borderRadius: 8 }}
+                      onClick={() => { setEditing(w); setShowForm(true) }}>
+                      Éditer
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         )}
       </div>
