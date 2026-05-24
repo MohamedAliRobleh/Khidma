@@ -26,9 +26,9 @@ export function useWorkers(filters = {}, page = 1) {
       .then(r => r.json())
       .then(data => {
         if (cancelled) return
-        setWorkers(data.workers)
-        setTotal(data.total)
-        setTotalPages(data.totalPages)
+        setWorkers(Array.isArray(data.workers) ? data.workers : [])
+        setTotal(data.total ?? 0)
+        setTotalPages(data.totalPages ?? 1)
         setLoading(false)
       })
       .catch(err => {

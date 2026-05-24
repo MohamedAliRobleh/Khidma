@@ -2,13 +2,6 @@
 import { cors } from '../../lib/cors.js'
 import { requireAdmin } from '../../lib/auth.js'
 import { prisma } from '../../lib/prisma.js'
-import { v2 as cloudinary } from 'cloudinary'
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key:    process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-})
 
 const WORKER_FIELDS = [
   'fullName', 'phone', 'age', 'photoUrl', 'cloudinaryId', 'bio',
@@ -102,6 +95,12 @@ export default async function handler(req, res) {
     try {
       const worker = await prisma.worker.findUnique({ where: { id } })
       if (worker?.cloudinaryId) {
+        const { v2: cloudinary } = await import('cloudinary')
+        cloudinary.config({
+          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+          api_key:    process.env.CLOUDINARY_API_KEY,
+          api_secret: process.env.CLOUDINARY_API_SECRET,
+        })
         await cloudinary.uploader.destroy(worker.cloudinaryId)
       }
       await prisma.worker.delete({ where: { id } })
