@@ -31,6 +31,7 @@ const TESTIMONIALS = [
 export default function Home() {
   const navigate = useNavigate()
   const [task, setTask] = useState('')
+  const [role, setRole] = useState(() => sessionStorage.getItem('khidma_role'))
   const { workers: featured, loading } = useWorkers({ featured: true }, 1)
 
   const handleSearch = e => {
@@ -38,8 +39,65 @@ export default function Home() {
     navigate(task ? `/bonnes?task=${task}` : '/bonnes')
   }
 
+  const chooseRole = r => {
+    sessionStorage.setItem('khidma_role', r)
+    setRole(r)
+    if (r === 'worker') navigate('/rejoindre')
+  }
+
   return (
     <>
+      {/* Role chooser overlay */}
+      {!role && (
+        <div
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: 'var(--bg-primary)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+        >
+          <div className="container text-center" style={{ maxWidth: 600 }}>
+            <div style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 800, marginBottom: '0.5rem' }}>
+              Bienvenue sur Khidma
+            </div>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', marginBottom: '2.5rem' }}>
+              Vous êtes…
+            </p>
+            <div className="row g-4">
+              <div className="col-6">
+                <button
+                  className="w-100 p-4 rounded-4 border-0 text-start"
+                  style={{ background: 'var(--primary)', color: '#fff', cursor: 'pointer', transition: 'transform 0.15s' }}
+                  onClick={() => chooseRole('employer')}
+                >
+                  <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>🏠</div>
+                  <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', fontWeight: 700 }}>
+                    Employeur
+                  </div>
+                  <div style={{ opacity: 0.85, fontSize: '0.9rem', marginTop: '0.4rem' }}>
+                    Je cherche une aide à domicile
+                  </div>
+                </button>
+              </div>
+              <div className="col-6">
+                <button
+                  className="w-100 p-4 rounded-4 border-0 text-start"
+                  style={{ background: 'var(--secondary)', color: '#fff', cursor: 'pointer', transition: 'transform 0.15s' }}
+                  onClick={() => chooseRole('worker')}
+                >
+                  <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>💼</div>
+                  <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', fontWeight: 700 }}>
+                    Travailleuse
+                  </div>
+                  <div style={{ opacity: 0.85, fontSize: '0.9rem', marginTop: '0.4rem' }}>
+                    Je propose mes services
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Hero */}
       <section
         style={{
