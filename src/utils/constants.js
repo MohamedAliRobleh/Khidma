@@ -35,7 +35,26 @@ export const EMPLOYER_PROVIDES = [
   { slug: 'transport', label: 'Transport' },
 ]
 
-export const LANGUAGES = ['Français', 'Somali', 'Arabe', 'Afar', 'Anglais']
+export const LANGUAGES = [
+  'Somali', 'Afar', 'Arabe', 'Amharique', 'Oromo', 'Français', 'Anglais',
+]
+
+export const LANGUAGE_LEVELS = [
+  { slug: 'natif',         label: 'Natif',         color: '#22c55e' },
+  { slug: 'courant',       label: 'Courant',        color: '#3b82f6' },
+  { slug: 'intermediaire', label: 'Intermédiaire',  color: '#f59e0b' },
+  { slug: 'basique',       label: 'Basique',        color: '#94a3b8' },
+]
+
+export const VERIFIED_SKILLS = [
+  { slug: 'menage',    label: 'Ménage',           icon: '🧹' },
+  { slug: 'enfants',   label: "Garde d'enfants",  icon: '👶' },
+  { slug: 'cuisine',   label: 'Cuisine',           icon: '🍳' },
+  { slug: 'repassage', label: 'Repassage',         icon: '👕' },
+  { slug: 'courses',   label: 'Courses',           icon: '🛒' },
+  { slug: 'jardinage', label: 'Jardinage',         icon: '🌿' },
+  { slug: 'seniors',   label: 'Soins seniors',     icon: '🧓' },
+]
 
 export const SERVICE_CATEGORIES = TASKS.map(t => ({
   ...t,
