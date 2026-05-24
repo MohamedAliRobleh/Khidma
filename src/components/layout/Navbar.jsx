@@ -1,7 +1,16 @@
 // src/components/layout/Navbar.jsx
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useEmployer } from '../../hooks/useEmployer'
 
 export default function Navbar() {
+  const { employer, logout } = useEmployer()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
+
   return (
     <nav className="navbar navbar-expand-lg navbar-khidma sticky-top py-2">
       <div className="container">
@@ -51,19 +60,47 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <NavLink to="/compte"
-            className="btn btn-primary-custom ms-2"
-            style={({ isActive }) => ({
-              whiteSpace: 'nowrap',
-              background: isActive ? 'var(--primary-dark)' : 'var(--primary)',
-              color: '#fff',
-              borderRadius: 50,
-              padding: '0.55rem 1.2rem',
-              fontWeight: 700,
-            })}
-          >
-            Espace employeur
-          </NavLink>
+
+          {employer ? (
+            <div className="d-flex align-items-center gap-2 ms-2">
+              <NavLink
+                to="/compte/tableau-de-bord"
+                className="btn btn-primary-custom"
+                style={({ isActive }) => ({
+                  whiteSpace: 'nowrap',
+                  background: isActive ? 'var(--primary-dark)' : 'var(--primary)',
+                  color: '#fff',
+                  borderRadius: 50,
+                  padding: '0.55rem 1.2rem',
+                  fontWeight: 700,
+                })}
+              >
+                👤 {employer.name.split(' ')[0]}
+              </NavLink>
+              <button
+                onClick={handleLogout}
+                className="btn btn-sm btn-outline-secondary"
+                style={{ borderRadius: 50, whiteSpace: 'nowrap' }}
+              >
+                Déconnexion
+              </button>
+            </div>
+          ) : (
+            <NavLink to="/compte"
+              className="btn btn-primary-custom ms-2"
+              style={({ isActive }) => ({
+                whiteSpace: 'nowrap',
+                background: isActive ? 'var(--primary-dark)' : 'var(--primary)',
+                color: '#fff',
+                borderRadius: 50,
+                padding: '0.55rem 1.2rem',
+                fontWeight: 700,
+              })}
+            >
+              Espace employeur
+            </NavLink>
+          )}
+
           <NavLink to="/rejoindre"
             className="btn btn-outline-secondary ms-2"
             style={({ isActive }) => ({

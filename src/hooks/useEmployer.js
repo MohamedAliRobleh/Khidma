@@ -1,15 +1,28 @@
 // src/hooks/useEmployer.js
-import { useState, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 const TOKEN_KEY = 'khidma_employer_token'
 const EMPLOYER_KEY = 'khidma_employer'
+const SYNC_EVENT = 'khidma_employer_sync'
+
+function readEmployer() {
+  try { return JSON.parse(localStorage.getItem(EMPLOYER_KEY)) } catch { return null }
+}
+
+function broadcast() {
+  window.dispatchEvent(new Event(SYNC_EVENT))
+}
 
 export function useEmployer() {
-  const [employer, setEmployer] = useState(() => {
-    try { return JSON.parse(localStorage.getItem(EMPLOYER_KEY)) } catch { return null }
-  })
+  const [employer, setEmployer] = useState(readEmployer)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    const sync = () => setEmployer(readEmployer())
+    window.addEventListener(SYNC_EVENT, sync)
+    return () => window.removeEventListener(SYNC_EVENT, sync)
+  }, [])
 
   const token = () => localStorage.getItem(TOKEN_KEY)
 
@@ -22,12 +35,14 @@ export function useEmployer() {
     localStorage.setItem(TOKEN_KEY, data.token)
     localStorage.setItem(EMPLOYER_KEY, JSON.stringify(data.employer))
     setEmployer(data.employer)
+    broadcast()
   }
 
   const logout = () => {
     localStorage.removeItem(TOKEN_KEY)
     localStorage.removeItem(EMPLOYER_KEY)
     setEmployer(null)
+    broadcast()
   }
 
   const register = useCallback(async (email, password, name, phone) => {
