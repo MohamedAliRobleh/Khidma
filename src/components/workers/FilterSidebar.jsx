@@ -1,5 +1,5 @@
 // src/components/workers/FilterSidebar.jsx
-import { TASKS, NEIGHBORHOODS, WORK_TYPES, SCHEDULE_OPTIONS } from '../../utils/constants'
+import { TASKS, NEIGHBORHOODS, WORK_TYPES, SCHEDULE_OPTIONS, LANGUAGES } from '../../utils/constants'
 
 export default function FilterSidebar({ filters, onChange }) {
   const toggle = (field, value) => {
@@ -64,6 +64,26 @@ export default function FilterSidebar({ filters, onChange }) {
               style={{ accentColor: 'var(--primary)' }}
             />
             <label className="form-check-label small" htmlFor={`wt-${t.slug}`}>{t.label}</label>
+          </div>
+        ))}
+      </div>
+
+      {/* Language filter */}
+      <div className="mb-4">
+        <p className="small fw-bold mb-2" style={{ color: 'var(--text-secondary)' }}>LANGUE PARLÉE</p>
+        {LANGUAGES.map(lang => (
+          <div key={lang} className="form-check mb-1">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id={`lang-${lang}`}
+              checked={(filters.language || []).includes(lang)}
+              onChange={() => toggle('language', lang)}
+              style={{ accentColor: 'var(--primary)' }}
+            />
+            <label className="form-check-label small" htmlFor={`lang-${lang}`}>
+              {lang}
+            </label>
           </div>
         ))}
       </div>
