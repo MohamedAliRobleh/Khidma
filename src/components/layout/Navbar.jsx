@@ -52,11 +52,11 @@ export default function Navbar() {
             ))}
           </ul>
           <NavLink to="/rejoindre" className="nav-link"
-            style={({ isActive }) => ({ color: isActive ? 'var(--accent)' : 'rgba(255,255,255,0.8)' })}>
+            style={({ isActive }) => ({ color: isActive ? 'var(--accent)' : 'var(--text-primary)' })}>
             Je m'inscris
           </NavLink>
           <NavLink to="/compte" className="nav-link"
-            style={({ isActive }) => ({ color: isActive ? 'var(--accent)' : 'rgba(255,255,255,0.8)' })}>
+            style={({ isActive }) => ({ color: isActive ? 'var(--accent)' : 'var(--text-primary)' })}>
             Espace employeur
           </NavLink>
           <Link
