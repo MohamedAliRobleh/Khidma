@@ -1,13 +1,13 @@
 // api/workers/index.js
 import { cors } from '../../lib/cors.js'
-import { requireAdmin } from '../../lib/auth.js'
+import { requireAdmin, verifyToken } from '../../lib/auth.js'
 import { prisma } from '../../lib/prisma.js'
 
 const WORKER_FIELDS = [
   'fullName', 'phone', 'age', 'photoUrl', 'cloudinaryId', 'bio',
-  'city', 'neighborhood', 'available', 'verified', 'featured',
-  'experience', 'languages', 'tasks', 'priceFdj', 'workType',
-  'schedule', 'employerProvides',
+  'city', 'neighborhood', 'available', 'availableFrom', 'verified',
+  'verifiedSkills', 'featured', 'status', 'experience', 'languageLevels',
+  'tasks', 'priceFdj', 'workType', 'schedule', 'employerProvides',
 ]
 
 function pickWorkerFields(body) {
@@ -21,14 +21,24 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     const {
-      task, neighborhood, workType, available,
-      minRating, sort, page = '1', limit = '12',
+      task, neighborhood, workType, available, featured,
+      language, minRating, sort, page = '1', limit = '12', status,
     } = req.query
 
+    const adminToken = req.headers['authorization']?.replace('Bearer ', '') || ''
+    const isAdmin = await verifyToken(adminToken)
+
     const where = {}
+    if (!isAdmin) {
+      where.status = 'ACTIVE'
+    } else if (status) {
+      where.status = status
+    }
+
     if (task)         where.tasks        = { has: task }
     if (neighborhood) where.neighborhood = neighborhood
     if (workType)     where.workType     = { has: workType }
+    if (featured !== undefined) where.featured = featured === 'true'
     if (available !== undefined) where.available = available === 'true'
 
     try {
@@ -36,6 +46,14 @@ export default async function handler(req, res) {
         where,
         include: { reviews: { where: { approved: true } } },
       })
+
+      if (language) {
+        const langs = Array.isArray(language) ? language : [language]
+        workers = workers.filter(w => {
+          const levels = Array.isArray(w.languageLevels) ? w.languageLevels : []
+          return langs.some(lang => levels.some(l => l.language === lang))
+        })
+      }
 
       if (minRating) {
         const min = parseFloat(minRating)

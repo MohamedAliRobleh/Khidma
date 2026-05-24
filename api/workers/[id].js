@@ -12,15 +12,48 @@ cloudinary.config({
 
 const WORKER_FIELDS = [
   'fullName', 'phone', 'age', 'photoUrl', 'cloudinaryId', 'bio',
-  'city', 'neighborhood', 'available', 'verified', 'featured',
-  'experience', 'languages', 'tasks', 'priceFdj', 'workType',
-  'schedule', 'employerProvides',
+  'city', 'neighborhood', 'available', 'availableFrom', 'verified',
+  'verifiedSkills', 'featured', 'status', 'experience', 'languageLevels',
+  'tasks', 'priceFdj', 'workType', 'schedule', 'employerProvides',
 ]
 
 function pickWorkerFields(body) {
   return Object.fromEntries(
     WORKER_FIELDS.filter(k => k in body).map(k => [k, body[k]])
   )
+}
+
+async function triggerAvailabilityAlerts(workerId, workerName) {
+  try {
+    const alerts = await prisma.availabilityAlert.findMany({
+      where: { workerId },
+      include: { employer: true },
+    })
+    if (!alerts.length) return
+
+    await Promise.all(alerts.map(alert =>
+      fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'api-key': process.env.BREVO_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sender: { name: 'Khidma', email: process.env.ADMIN_EMAIL },
+          to: [{ email: alert.employer.email, name: alert.employer.name }],
+          subject: `${workerName} est à nouveau disponible`,
+          htmlContent: `
+            <h2>Bonne nouvelle !</h2>
+            <p>Bonjour ${alert.employer.name},</p>
+            <p><strong>${workerName}</strong> que vous suivez sur Khidma est maintenant disponible.</p>
+            <p><a href="https://khidma.vercel.app/bonnes/${workerId}">Voir son profil</a></p>
+          `,
+        }),
+      }).catch(e => console.error('Alert email error:', e))
+    ))
+  } catch (e) {
+    console.error('triggerAvailabilityAlerts error:', e)
+  }
 }
 
 export default async function handler(req, res) {
@@ -49,7 +82,14 @@ export default async function handler(req, res) {
   if (req.method === 'PUT') {
     if (!(await requireAdmin(req, res))) return
     try {
-      const worker = await prisma.worker.update({ where: { id }, data: pickWorkerFields(req.body) })
+      const prev = await prisma.worker.findUnique({ where: { id }, select: { available: true, fullName: true } })
+      const data = pickWorkerFields(req.body)
+      const worker = await prisma.worker.update({ where: { id }, data })
+
+      if (data.available === true && prev && !prev.available) {
+        triggerAvailabilityAlerts(id, prev.fullName)
+      }
+
       return res.json(worker)
     } catch (err) {
       console.error('Worker PUT error:', err)
