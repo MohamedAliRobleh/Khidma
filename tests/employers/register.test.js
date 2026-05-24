@@ -1,3 +1,4 @@
+// tests/employers/register.test.js
 import { describe, it, expect } from 'vitest'
 import { hashPassword, verifyPassword } from '../../lib/employerAuth.js'
 

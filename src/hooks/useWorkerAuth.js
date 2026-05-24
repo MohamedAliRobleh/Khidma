@@ -48,10 +48,10 @@ export function useWorkerAuth() {
     setLoading(true)
     setError('')
     try {
-      const res = await fetch('/api/workers/auth/login', {
+      const res = await fetch('/api/workers/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, pin }),
+        body: JSON.stringify({ action: 'login', phone, pin }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Erreur de connexion')

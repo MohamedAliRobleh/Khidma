@@ -1,7 +1,6 @@
-// api/admin/verify.test.js
+// tests/admin/verify.test.js
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-// Mock the lib modules before importing handler
 vi.mock('../../lib/auth.js', () => ({
   createToken: vi.fn(() => Promise.resolve('mock-jwt-token')),
 }))
@@ -36,14 +35,14 @@ describe('POST /api/admin/verify', () => {
   })
 
   it('returns token when password matches', async () => {
-    const { default: handler } = await import('./verify.js')
+    const { default: handler } = await import('../../api/admin/verify.js')
     const { req, res } = makeMocks('POST', { password: 'secret123' })
     await handler(req, res)
     expect(res._body.token).toBe('mock-jwt-token')
   })
 
   it('returns 401 on wrong password', async () => {
-    const { default: handler } = await import('./verify.js')
+    const { default: handler } = await import('../../api/admin/verify.js')
     const { req, res } = makeMocks('POST', { password: 'wrong' })
     await handler(req, res)
     expect(res._status).toBe(401)
@@ -51,7 +50,7 @@ describe('POST /api/admin/verify', () => {
   })
 
   it('returns 405 for non-POST method', async () => {
-    const { default: handler } = await import('./verify.js')
+    const { default: handler } = await import('../../api/admin/verify.js')
     const { req, res } = makeMocks('GET', {})
     await handler(req, res)
     expect(res._status).toBe(405)
