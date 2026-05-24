@@ -10,17 +10,21 @@ export function useWorker(id) {
     if (!id) return
     let cancelled = false
     setLoading(true)
+    setError(null)
 
-    fetch(`/api/workers/${id}`)
-      .then(r => {
-        if (!r.ok) throw new Error('Travailleuse introuvable')
+    fetch(`/api/workers/${encodeURIComponent(id)}`)
+      .then(async r => {
+        if (!r.ok) {
+          const data = await r.json().catch(() => ({}))
+          throw new Error(data.error || 'Travailleuse introuvable')
+        }
         return r.json()
       })
       .then(data => {
         if (!cancelled) { setWorker(data); setLoading(false) }
       })
       .catch(err => {
-        if (!cancelled) { setError(err.message); setLoading(false) }
+        if (!cancelled) { console.error('useWorker fetch error:', err); setError(err.message); setLoading(false) }
       })
 
     return () => { cancelled = true }

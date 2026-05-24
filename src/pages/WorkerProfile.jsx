@@ -136,7 +136,9 @@ export default function WorkerProfile() {
   if (error || !worker) {
     return (
       <div className="container py-5 text-center">
-        <p style={{ color: 'var(--text-secondary)' }}>Travailleuse introuvable.</p>
+        <p style={{ color: 'var(--text-secondary)' }}>
+          {error || 'Travailleuse introuvable.'}
+        </p>
         <Link to="/bonnes" className="btn btn-primary-custom mt-2">Retour à la liste</Link>
       </div>
     )
