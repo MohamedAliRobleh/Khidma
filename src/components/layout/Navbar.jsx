@@ -51,18 +51,23 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <NavLink to="/rejoindre" className="nav-link"
-            style={({ isActive }) => ({ color: isActive ? 'var(--accent)' : 'var(--text-primary)' })}>
-            Je m'inscris
-          </NavLink>
-          <NavLink to="/compte" className="nav-link"
-            style={({ isActive }) => ({ color: isActive ? 'var(--accent)' : 'var(--text-primary)' })}>
+          <NavLink to="/compte"
+            className="btn btn-primary-custom ms-2"
+            style={({ isActive }) => ({
+              whiteSpace: 'nowrap',
+              background: isActive ? 'var(--primary-dark)' : 'var(--primary)',
+              color: '#fff',
+              borderRadius: 50,
+              padding: '0.55rem 1.2rem',
+              fontWeight: 700,
+            })}
+          >
             Espace employeur
           </NavLink>
           <Link
             to="/bonnes"
-            className="btn btn-primary-custom ms-2"
-            style={{ whiteSpace: 'nowrap' }}
+            className="btn btn-outline-secondary ms-2"
+            style={{ whiteSpace: 'nowrap', borderRadius: 50 }}
           >
             Vous cherchez du travail ?
           </Link>
