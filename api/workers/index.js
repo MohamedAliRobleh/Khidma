@@ -73,8 +73,10 @@ export default async function handler(req, res) {
         workers.sort((a, b) => avgOf(b) - avgOf(a))
       } else if (sort === 'price') {
         workers.sort((a, b) => (a.priceFdj ?? Infinity) - (b.priceFdj ?? Infinity))
-      } else {
+      } else if (sort === 'recent') {
         workers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      } else {
+        workers.sort((a, b) => a.fullName.localeCompare(b.fullName, 'fr'))
       }
 
       const total   = workers.length

@@ -12,7 +12,7 @@ export default function WorkersList() {
     return task ? { task: [task] } : {}
   })
   const [page, setPage] = useState(1)
-  const [sort, setSort] = useState('recent')
+  const [sort, setSort] = useState('')
 
   const { workers, total, totalPages, loading } = useWorkers({ ...filters, sort }, page)
 
@@ -53,9 +53,10 @@ export default function WorkersList() {
                 onChange={e => setSort(e.target.value)}
                 style={{ width: 'auto', borderRadius: 8, border: '1px solid var(--border)' }}
               >
-                <option value="recent">Plus récentes</option>
+                <option value="">A → Z</option>
                 <option value="rating">Mieux notées</option>
                 <option value="price">Prix croissant</option>
+                <option value="recent">Plus récentes</option>
               </select>
             </div>
 
