@@ -139,7 +139,7 @@ export default function WorkerProfile() {
         <p style={{ color: 'var(--text-secondary)' }}>
           {error || 'Travailleuse introuvable.'}
         </p>
-        <Link to="/bonnes" className="btn btn-primary-custom mt-2">Retour à la liste</Link>
+        <Link to="/aides" className="btn btn-primary-custom mt-2">Retour à la liste</Link>
       </div>
     )
   }
@@ -155,7 +155,7 @@ export default function WorkerProfile() {
       <div className="container" style={{ paddingTop: '2rem' }}>
         {/* Breadcrumb */}
         <nav className="mb-4">
-          <Link to="/bonnes" style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', textDecoration: 'none' }}>
+          <Link to="/aides" style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', textDecoration: 'none' }}>
             ← Retour à la liste
           </Link>
         </nav>

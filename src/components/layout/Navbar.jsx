@@ -46,7 +46,7 @@ export default function Navbar() {
           <ul className="navbar-nav mx-auto gap-1">
             {[
               { to: '/', label: 'Accueil' },
-              { to: '/bonnes', label: 'Trouver une aide' },
+              { to: '/aides', label: 'Trouver une aide' },
               { to: '/a-propos', label: 'À propos' },
             ].map(({ to, label }) => (
               <li key={to} className="nav-item">

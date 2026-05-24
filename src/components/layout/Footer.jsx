@@ -34,11 +34,11 @@ export default function Footer() {
               <span style={{ color: 'rgba(255,255,255,0.5)' }}>خدمة</span>
             </div>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.92rem' }}>
-              Trouvez une aide de confiance, rapidement. La première plateforme de mise en relation avec des bonnes à Djibouti.
+              Trouvez une aide de confiance, rapidement. La première plateforme de mise en relation avec des femmes de ménage à Djibouti.
             </p>
             <div className="mt-3 d-flex flex-column gap-1" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
               <Link to="/"        className="text-decoration-none" style={{ color: 'inherit' }}>Accueil</Link>
-              <Link to="/bonnes"  className="text-decoration-none" style={{ color: 'inherit' }}>Trouver une aide</Link>
+              <Link to="/aides"  className="text-decoration-none" style={{ color: 'inherit' }}>Trouver une aide</Link>
               <Link to="/a-propos" className="text-decoration-none" style={{ color: 'inherit' }}>À propos</Link>
             </div>
           </div>

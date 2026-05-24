@@ -28,7 +28,7 @@ function WorkerHistoryCard({ entry, onMarkPast, onToggleAlert, hasAlert }) {
         <div className="flex-grow-1">
           <div className="d-flex justify-content-between align-items-start flex-wrap gap-2">
             <div>
-              <Link to={`/bonnes/${w.id}`} className="fw-bold text-decoration-none"
+              <Link to={`/aides/${w.id}`} className="fw-bold text-decoration-none"
                 style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>
                 {w.fullName}
               </Link>
@@ -234,7 +234,7 @@ export default function EmployerDashboard() {
                   : alerts.map(a => (
                     <div key={a.id} className="card-khidma p-3 mb-3 d-flex align-items-center justify-content-between">
                       <div>
-                        <Link to={`/bonnes/${a.workerId}`} className="fw-bold text-decoration-none"
+                        <Link to={`/aides/${a.workerId}`} className="fw-bold text-decoration-none"
                           style={{ color: 'var(--text-primary)' }}>
                           {a.worker?.fullName}
                         </Link>

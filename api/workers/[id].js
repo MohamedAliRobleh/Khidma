@@ -42,7 +42,7 @@ async function triggerAvailabilityAlerts(workerId, workerName) {
             <h2>Bonne nouvelle !</h2>
             <p>Bonjour ${alert.employer.name},</p>
             <p><strong>${workerName}</strong> que vous suivez sur Khidma est maintenant disponible.</p>
-            <p><a href="https://khidma.vercel.app/bonnes/${workerId}">Voir son profil</a></p>
+            <p><a href="https://khidma.vercel.app/aides/${workerId}">Voir son profil</a></p>
           `,
         }),
       }).catch(e => console.error('Alert email error:', e))

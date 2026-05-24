@@ -21,7 +21,7 @@ export default function About() {
           <div className="col-lg-6">
             <h2 style={{ fontFamily: 'var(--font-heading)' }} className="mb-4">Notre mission</h2>
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-              Khidma (خدمة) est née d'un constat simple : trouver une bonne de confiance à Djibouti relevait du bouche-à-oreille, long, incertain, et parfois décevant.
+              Khidma (خدمة) est née d'un constat simple : trouver une femme de ménage de confiance à Djibouti relevait du bouche-à-oreille, long, incertain, et parfois décevant.
             </p>
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               Notre plateforme centralise les profils vérifiés, les avis authentiques et les conditions de travail claires — pour que chaque famille puisse prendre une décision éclairée, et que chaque travailleuse puisse valoriser son savoir-faire.

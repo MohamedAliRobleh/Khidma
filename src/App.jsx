@@ -36,8 +36,8 @@ export default function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
-        <Route path="/bonnes" element={<PublicLayout><WorkersList /></PublicLayout>} />
-        <Route path="/bonnes/:id" element={<PublicLayout><WorkerProfile /></PublicLayout>} />
+        <Route path="/aides" element={<PublicLayout><WorkersList /></PublicLayout>} />
+        <Route path="/aides/:id" element={<PublicLayout><WorkerProfile /></PublicLayout>} />
         <Route path="/a-propos" element={<PublicLayout><About /></PublicLayout>} />
 
         {/* Worker self-registration */}

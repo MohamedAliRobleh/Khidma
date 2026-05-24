@@ -10,7 +10,7 @@ import { TASKS } from '../utils/constants'
 const HERO_BG = 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80'
 
 const STATS = [
-  { value: '120+', label: 'Bonnes inscrites' },
+  { value: '120+', label: 'Aides inscrites' },
   { value: '4.8★', label: 'Note moyenne' },
   { value: '500+', label: 'Familles satisfaites' },
   { value: '6',    label: 'Services proposés' },
@@ -36,7 +36,7 @@ export default function Home() {
 
   const handleSearch = e => {
     e.preventDefault()
-    navigate(task ? `/bonnes?task=${task}` : '/bonnes')
+    navigate(task ? `/aides?task=${task}` : '/aides')
   }
 
   const chooseRole = r => {
@@ -114,7 +114,7 @@ export default function Home() {
               Trouvez une aide de confiance,<br />rapidement.
             </h1>
             <p style={{ fontSize: '1.2rem', opacity: 0.9, maxWidth: 560, marginBottom: '2rem' }}>
-              La première plateforme djiboutienne pour trouver des bonnes à domicile vérifiées. Ménage, cuisine, garde d'enfants et plus.
+              La première plateforme djiboutienne pour trouver des femmes de ménage vérifiées. Ménage, cuisine, garde d'enfants et plus.
             </p>
 
             <form onSubmit={handleSearch} className="d-flex gap-2 flex-wrap">
@@ -175,7 +175,7 @@ export default function Home() {
                   <div
                     className="card-khidma p-3 text-center"
                     style={{ cursor: 'pointer' }}
-                    onClick={() => navigate(`/bonnes?task=${t.slug}`)}
+                    onClick={() => navigate(`/aides?task=${t.slug}`)}
                   >
                     <div style={{ fontSize: '2.5rem', marginBottom: 8 }}>{t.icon}</div>
                     <div style={{ fontWeight: 600, fontSize: '0.88rem', color: 'var(--text-primary)' }}>{t.label}</div>
@@ -190,7 +190,7 @@ export default function Home() {
       {/* Featured workers */}
       <section className="py-5">
         <div className="container">
-          <h2 className="mb-2" style={{ fontFamily: 'var(--font-heading)' }}>Nos bonnes en vedette</h2>
+          <h2 className="mb-2" style={{ fontFamily: 'var(--font-heading)' }}>Nos femmes de ménage en vedette</h2>
           <p className="mb-4" style={{ color: 'var(--text-secondary)' }}>Sélectionnées pour leur sérieux et leurs excellents avis</p>
           <div className="row g-4">
             {loading
@@ -201,8 +201,8 @@ export default function Home() {
             }
           </div>
           <div className="text-center mt-4">
-            <button className="btn btn-primary-custom px-5" onClick={() => navigate('/bonnes')}>
-              Voir toutes les bonnes
+            <button className="btn btn-primary-custom px-5" onClick={() => navigate('/aides')}>
+              Voir toutes les aides
             </button>
           </div>
         </div>

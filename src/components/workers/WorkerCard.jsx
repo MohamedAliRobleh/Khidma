@@ -21,7 +21,7 @@ export default function WorkerCard({ worker, index = 0 }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.05 }}
     >
-      <Link to={`/bonnes/${worker.id}`} className="text-decoration-none">
+      <Link to={`/aides/${worker.id}`} className="text-decoration-none">
         <div className="card-khidma overflow-hidden h-100">
           {/* Photo */}
           <div style={{ position: 'relative', height: 220, background: 'var(--bg-secondary)' }}>

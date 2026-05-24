@@ -32,6 +32,6 @@ describe('WorkerCard', () => {
   it('links to worker profile', () => {
     render(<MemoryRouter><WorkerCard worker={mockWorker} /></MemoryRouter>)
     const link = screen.getByRole('link')
-    expect(link).toHaveAttribute('href', '/bonnes/w1')
+    expect(link).toHaveAttribute('href', '/aides/w1')
   })
 })
