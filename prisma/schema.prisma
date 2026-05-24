@@ -8,39 +8,84 @@ datasource db {
 }
 
 model Worker {
-  id               String   @id @default(cuid())
+  id               String              @id @default(cuid())
   fullName         String
   phone            String?
   age              Int?
   photoUrl         String?
   cloudinaryId     String?
   bio              String?
-  city             String   @default("Djibouti-Ville")
+  city             String              @default("Djibouti-Ville")
   neighborhood     String?
-  available        Boolean  @default(true)
-  verified         Boolean  @default(false)
-  featured         Boolean  @default(false)
+  available        Boolean             @default(true)
+  availableFrom    DateTime?
+  verified         Boolean             @default(false)
+  verifiedSkills   String[]            @default([])
+  featured         Boolean             @default(false)
+  status           String              @default("ACTIVE")
+  selfRegistered   Boolean             @default(false)
   experience       Int?
-  languages        String[] @default(["Français", "Somali"])
-  tasks            String[] @default([])
+  languageLevels   Json                @default("[]")
+  tasks            String[]            @default([])
   priceFdj         Int?
-  workType         String[] @default([])
-  schedule         String[] @default([])
-  employerProvides String[] @default([])
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  workType         String[]            @default([])
+  schedule         String[]            @default([])
+  employerProvides String[]            @default([])
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
   reviews          Review[]
+  history          WorkerHistory[]
+  alerts           AvailabilityAlert[]
+}
+
+model Employer {
+  id           String              @id @default(cuid())
+  email        String              @unique
+  passwordHash String
+  name         String
+  phone        String?
+  createdAt    DateTime            @default(now())
+  history      WorkerHistory[]
+  alerts       AvailabilityAlert[]
+  reviews      Review[]
+}
+
+model WorkerHistory {
+  id         String    @id @default(cuid())
+  employerId String
+  workerId   String
+  status     String    @default("ACTIVE")
+  startDate  DateTime  @default(now())
+  endDate    DateTime?
+  employer   Employer  @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  worker     Worker    @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  @@unique([employerId, workerId])
+}
+
+model AvailabilityAlert {
+  id         String   @id @default(cuid())
+  employerId String
+  workerId   String
+  createdAt  DateTime @default(now())
+  employer   Employer @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  worker     Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  @@unique([employerId, workerId])
 }
 
 model Review {
-  id         String   @id @default(cuid())
+  id         String    @id @default(cuid())
   workerId   String
-  worker     Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  worker     Worker    @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  employerId String?
+  employer   Employer? @relation(fields: [employerId], references: [id])
   clientName String
+  anonymous  Boolean   @default(false)
   rating     Int
   comment    String?
-  approved   Boolean  @default(true)
-  createdAt  DateTime @default(now())
+  approved   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
 }
 
 model ServiceCategory {
