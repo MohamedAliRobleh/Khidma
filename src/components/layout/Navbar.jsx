@@ -51,6 +51,14 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
+          <NavLink to="/rejoindre" className="nav-link"
+            style={({ isActive }) => ({ color: isActive ? 'var(--accent)' : 'rgba(255,255,255,0.8)' })}>
+            Je m'inscris
+          </NavLink>
+          <NavLink to="/compte" className="nav-link"
+            style={({ isActive }) => ({ color: isActive ? 'var(--accent)' : 'rgba(255,255,255,0.8)' })}>
+            Espace employeur
+          </NavLink>
           <Link
             to="/bonnes"
             className="btn btn-primary-custom ms-2"

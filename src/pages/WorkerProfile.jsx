@@ -1,6 +1,7 @@
 // src/pages/WorkerProfile.jsx
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { useEmployer } from '../hooks/useEmployer'
 import { useWorker } from '../hooks/useWorker'
 import { useWorkers } from '../hooks/useWorkers'
 import WorkerProfileHeader from '../components/workers/WorkerProfileHeader'
@@ -86,6 +87,28 @@ export default function WorkerProfile() {
   const { id } = useParams()
   const { worker, loading, error, refetch } = useWorker(id)
   const [showModal, setShowModal] = useState(false)
+
+  const { employer, addToHistory, toggleAlert, fetchAlerts } = useEmployer()
+  const [alerts, setAlerts] = useState([])
+  const [inHistory, setInHistory] = useState(false)
+
+  useEffect(() => {
+    if (!employer || !worker) return
+    fetchAlerts().then(a => setAlerts(a))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [employer, worker, fetchAlerts])
+
+  const hasAlert = alerts.some(a => a.workerId === id)
+
+  const handleAddToHistory = async () => {
+    await addToHistory(id)
+    setInHistory(true)
+  }
+  const handleToggleAlert = async () => {
+    await toggleAlert(id, hasAlert)
+    const a = await fetchAlerts()
+    setAlerts(a)
+  }
 
   const firstTask = worker?.tasks?.[0]
   const { workers: similar } = useWorkers(
@@ -237,6 +260,35 @@ export default function WorkerProfile() {
                 <div className="mb-1">📍 {worker.neighborhood || worker.city}</div>
                 {worker.experience && <div>💼 {worker.experience} ans d'expérience</div>}
               </div>
+
+              {employer && (
+                <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--border)' }}>
+                  <button
+                    className="btn w-100 mb-2"
+                    style={{ borderRadius: 10, background: inHistory ? '#22c55e22' : 'var(--bg-secondary)', color: inHistory ? '#22c55e' : 'var(--text-primary)', border: `1px solid ${inHistory ? '#22c55e' : 'var(--border)'}` }}
+                    onClick={handleAddToHistory}
+                    disabled={inHistory}
+                  >
+                    {inHistory ? '✓ Dans mon historique' : '+ Ajouter à mon historique'}
+                  </button>
+                  {!worker.available && (
+                    <button
+                      className="btn w-100"
+                      style={{ borderRadius: 10, background: hasAlert ? '#f59e0b22' : 'var(--bg-secondary)', color: hasAlert ? '#f59e0b' : 'var(--text-primary)', border: `1px solid ${hasAlert ? '#f59e0b' : 'var(--border)'}`, fontSize: '0.9rem' }}
+                      onClick={handleToggleAlert}
+                    >
+                      {hasAlert ? '🔔 Alerte active — cliquer pour désactiver' : '🔕 M\'alerter si disponible'}
+                    </button>
+                  )}
+                </div>
+              )}
+              {!employer && (
+                <div className="mt-3 pt-3 text-center" style={{ borderTop: '1px solid var(--border)' }}>
+                  <Link to="/compte" style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                    Créer un compte employeur pour suivre cette travailleuse
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
