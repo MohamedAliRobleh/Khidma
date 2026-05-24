@@ -14,9 +14,18 @@ export function useWorker(id) {
 
     fetch(`/api/workers/${encodeURIComponent(id)}`)
       .then(async r => {
+        const contentType = r.headers.get('content-type') || ''
         if (!r.ok) {
-          const data = await r.json().catch(() => ({}))
-          throw new Error(data.error || 'Travailleuse introuvable')
+          if (contentType.includes('application/json')) {
+            const data = await r.json().catch(() => ({}))
+            throw new Error(data.error || 'Travailleuse introuvable')
+          }
+          const text = await r.text().catch(() => '')
+          throw new Error(text ? text.slice(0, 200) : 'Travailleuse introuvable')
+        }
+        if (!contentType.includes('application/json')) {
+          const text = await r.text().catch(() => '')
+          throw new Error(text ? 'Réponse API invalide' : 'Travailleuse introuvable')
         }
         return r.json()
       })
