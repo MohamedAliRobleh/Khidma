@@ -48,6 +48,7 @@ function PinInput({ value, onChange }) {
 
 export default function WorkerLogin() {
   const { worker, login, logout, fetchMe, updateMe, loading, error } = useWorkerAuth()
+  const [view, setView] = useState('landing') // 'landing' | 'login'
   const [phone, setPhone] = useState('')
   const [pin, setPin] = useState('')
   const [profile, setProfile] = useState(null)
@@ -88,7 +89,87 @@ export default function WorkerLogin() {
     }
   }
 
-  if (!worker) {
+  // Landing: choose between login or register
+  if (!worker && view === 'landing') {
+    return (
+      <div style={{ background: 'var(--bg-secondary)', minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
+        <div className="container py-5" style={{ maxWidth: 680 }}>
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="text-center mb-5">
+              <div style={{ fontSize: '2.8rem', marginBottom: '0.5rem' }}>👩‍💼</div>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800 }}>
+                Mon Espace
+              </h2>
+              <p style={{ color: 'var(--text-secondary)' }}>
+                Gérez votre profil et votre disponibilité sur Khidma
+              </p>
+            </div>
+
+            <div className="row g-4">
+              {/* Login card */}
+              <div className="col-md-6">
+                <button
+                  onClick={() => setView('login')}
+                  className="card-khidma w-100 text-start p-4"
+                  style={{
+                    border: '2px solid var(--border)', borderRadius: 20, cursor: 'pointer',
+                    background: '#fff', transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--primary)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                >
+                  <div style={{ fontSize: '2.2rem', marginBottom: '0.75rem' }}>🔑</div>
+                  <h4 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, marginBottom: '0.5rem' }}>
+                    Je me connecte
+                  </h4>
+                  <p className="small mb-3" style={{ color: 'var(--text-secondary)' }}>
+                    J'ai déjà un profil Khidma. Je veux mettre à jour ma disponibilité.
+                  </p>
+                  <span style={{
+                    display: 'inline-block', background: 'var(--primary)', color: '#fff',
+                    borderRadius: 50, padding: '0.45rem 1.2rem', fontWeight: 700, fontSize: '0.88rem',
+                  }}>
+                    Connexion →
+                  </span>
+                </button>
+              </div>
+
+              {/* Register card */}
+              <div className="col-md-6">
+                <Link
+                  to="/rejoindre"
+                  className="card-khidma d-block text-decoration-none p-4"
+                  style={{
+                    border: '2px solid var(--border)', borderRadius: 20,
+                    background: '#fff', transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--secondary)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                >
+                  <div style={{ fontSize: '2.2rem', marginBottom: '0.75rem' }}>✨</div>
+                  <h4 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
+                    Je crée mon profil
+                  </h4>
+                  <p className="small mb-3" style={{ color: 'var(--text-secondary)' }}>
+                    Je suis nouvelle sur Khidma. Je veux créer mon profil et trouver du travail.
+                  </p>
+                  <span style={{
+                    display: 'inline-block', background: 'var(--secondary)', color: '#fff',
+                    borderRadius: 50, padding: '0.45rem 1.2rem', fontWeight: 700, fontSize: '0.88rem',
+                  }}>
+                    Créer mon profil →
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    )
+  }
+
+  // Login form
+  if (!worker && view === 'login') {
     return (
       <div style={{ background: 'var(--bg-secondary)', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
         <div className="container py-5" style={{ maxWidth: 420 }}>
@@ -97,13 +178,21 @@ export default function WorkerLogin() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
           >
+            <button
+              onClick={() => { setView('landing'); setPin(''); setPhone('') }}
+              className="btn btn-sm btn-outline-secondary mb-4"
+              style={{ borderRadius: 8 }}
+            >
+              ← Retour
+            </button>
+
             <div className="text-center mb-4">
-              <div style={{ fontSize: '2.8rem', marginBottom: '0.5rem' }}>👩‍💼</div>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, color: 'var(--primary)' }}>
-                Mon Espace
+              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔑</div>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800 }}>
+                Connexion
               </h2>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                Connectez-vous pour gérer votre profil
+                Entrez votre téléphone et votre code PIN
               </p>
             </div>
 
@@ -147,15 +236,6 @@ export default function WorkerLogin() {
                 {loading ? 'Connexion…' : 'Se connecter'}
               </button>
             </form>
-
-            <div className="text-center mt-4">
-              <p className="small" style={{ color: 'var(--text-secondary)' }}>
-                Pas encore de profil ?{' '}
-                <Link to="/rejoindre" style={{ color: 'var(--primary)', fontWeight: 600 }}>
-                  Créer mon profil
-                </Link>
-              </p>
-            </div>
           </motion.div>
         </div>
       </div>
