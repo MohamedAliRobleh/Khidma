@@ -39,7 +39,9 @@ export default function AdminLogin() {
           <p style={{ color: 'var(--text-secondary)' }}>Espace administration</p>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="on">
+          <input type="text" name="username" autoComplete="username"
+            value="admin" readOnly style={{ display: 'none' }} />
           <div className="mb-3">
             <label className="form-label small fw-bold">Mot de passe</label>
             <input
