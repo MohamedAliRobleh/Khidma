@@ -25,6 +25,7 @@ model Worker {
   featured         Boolean             @default(false)
   status           String              @default("ACTIVE")
   selfRegistered   Boolean             @default(false)
+  pinHash          String?
   experience       Int?
   languageLevels   Json                @default("[]")
   tasks            String[]            @default([])

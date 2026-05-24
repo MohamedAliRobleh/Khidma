@@ -11,6 +11,7 @@ const EMPTY = {
   tasks: [], workType: [], schedule: [], employerProvides: [],
   priceFdj: '', available: true, verified: false, featured: false,
   photoUrl: '', cloudinaryId: '',
+  pin: '',
 }
 
 function toggleArr(arr, val) {
@@ -29,12 +30,14 @@ export default function WorkerForm({ initial, onSave, onClose }) {
     setSaving(true)
     setError('')
     try {
-      await onSave({
+      const payload = {
         ...form,
         age: form.age ? Number(form.age) : null,
         experience: form.experience ? Number(form.experience) : null,
         priceFdj: form.priceFdj ? Number(form.priceFdj) : null,
-      })
+      }
+      if (!form.pin) delete payload.pin
+      await onSave(payload)
     } catch (err) {
       setError(err.message || 'Erreur lors de la sauvegarde')
     } finally {
@@ -266,6 +269,27 @@ export default function WorkerForm({ initial, onSave, onClose }) {
                     value={form.availableFrom ? form.availableFrom.slice(0, 10) : ''}
                     onChange={e => setForm(f => ({ ...f, availableFrom: e.target.value || null }))}
                   />
+                </div>
+
+                {/* PIN */}
+                <div className="col-12">
+                  <label className="form-label small fw-bold">
+                    {initial?.id ? 'Réinitialiser le PIN (laisser vide pour ne pas modifier)' : 'Code PIN (4 chiffres)'}
+                  </label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={4}
+                    pattern="\d{4}"
+                    className="form-control"
+                    style={{ borderRadius: 10, maxWidth: 140, letterSpacing: '0.4em', fontSize: '1.1rem' }}
+                    placeholder="0000"
+                    value={form.pin}
+                    onChange={e => set('pin', e.target.value.replace(/\D/g, '').slice(0, 4))}
+                  />
+                  <div className="form-text small">
+                    Partagez ce PIN avec la travailleuse via WhatsApp pour qu'elle puisse se connecter.
+                  </div>
                 </div>
 
                 {/* Flags */}

@@ -10,6 +10,7 @@ import AdminLogin from './pages/AdminLogin'
 import AdminWorkers from './pages/AdminWorkers'
 import AdminReviews from './pages/AdminReviews'
 import WorkerApply from './pages/WorkerApply'
+import WorkerLogin from './pages/WorkerLogin'
 import EmployerAuth from './pages/EmployerAuth'
 import EmployerDashboard from './pages/EmployerDashboard'
 
@@ -41,6 +42,9 @@ export default function App() {
 
         {/* Worker self-registration */}
         <Route path="/rejoindre" element={<PublicLayout><WorkerApply /></PublicLayout>} />
+
+        {/* Worker self-management */}
+        <Route path="/mon-espace" element={<PublicLayout><WorkerLogin /></PublicLayout>} />
 
         {/* Employer routes */}
         <Route path="/compte" element={<EmployerAuth />} />

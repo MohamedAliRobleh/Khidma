@@ -1,13 +1,20 @@
 // src/components/layout/Navbar.jsx
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useEmployer } from '../../hooks/useEmployer'
+import { useWorkerAuth } from '../../hooks/useWorkerAuth'
 
 export default function Navbar() {
   const { employer, logout } = useEmployer()
+  const { worker, logout: workerLogout } = useWorkerAuth()
   const navigate = useNavigate()
 
   const handleLogout = () => {
     logout()
+    navigate('/')
+  }
+
+  const handleWorkerLogout = () => {
+    workerLogout()
     navigate('/')
   }
 
@@ -101,17 +108,42 @@ export default function Navbar() {
             </NavLink>
           )}
 
-          <NavLink to="/rejoindre"
-            className="btn btn-outline-secondary ms-2"
-            style={({ isActive }) => ({
-              whiteSpace: 'nowrap',
-              borderRadius: 50,
-              color: isActive ? 'var(--secondary)' : 'var(--text-secondary)',
-              borderColor: 'var(--border)',
-            })}
-          >
-            Je cherche du travail
-          </NavLink>
+          {worker ? (
+            <div className="d-flex align-items-center gap-2 ms-2">
+              <NavLink
+                to="/mon-espace"
+                className="btn btn-outline-secondary"
+                style={({ isActive }) => ({
+                  whiteSpace: 'nowrap',
+                  borderRadius: 50,
+                  color: isActive ? 'var(--secondary)' : 'var(--text-secondary)',
+                  borderColor: 'var(--border)',
+                  fontWeight: 600,
+                })}
+              >
+                👩‍💼 {worker.fullName?.split(' ')[0]}
+              </NavLink>
+              <button
+                onClick={handleWorkerLogout}
+                className="btn btn-sm btn-outline-secondary"
+                style={{ borderRadius: 50, whiteSpace: 'nowrap' }}
+              >
+                Déconnexion
+              </button>
+            </div>
+          ) : (
+            <NavLink to="/mon-espace"
+              className="btn btn-outline-secondary ms-2"
+              style={({ isActive }) => ({
+                whiteSpace: 'nowrap',
+                borderRadius: 50,
+                color: isActive ? 'var(--secondary)' : 'var(--text-secondary)',
+                borderColor: 'var(--border)',
+              })}
+            >
+              Je cherche du travail
+            </NavLink>
+          )}
         </div>
       </div>
     </nav>

@@ -2,6 +2,7 @@
 import { cors } from '../../lib/cors.js'
 import { requireAdmin, verifyToken } from '../../lib/auth.js'
 import { prisma } from '../../lib/prisma.js'
+import { hashPin } from '../../lib/workerAuth.js'
 
 const WORKER_FIELDS = [
   'fullName', 'phone', 'age', 'photoUrl', 'cloudinaryId', 'bio',
@@ -91,7 +92,11 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     if (!(await requireAdmin(req, res))) return
     try {
-      const worker = await prisma.worker.create({ data: pickWorkerFields(req.body) })
+      const data = pickWorkerFields(req.body)
+      if (req.body.pin && /^\d{4}$/.test(req.body.pin)) {
+        data.pinHash = await hashPin(req.body.pin)
+      }
+      const worker = await prisma.worker.create({ data })
       return res.status(201).json(worker)
     } catch (err) {
       console.error('Workers POST error:', err)

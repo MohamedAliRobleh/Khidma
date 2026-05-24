@@ -58,7 +58,7 @@ function LanguageSelector({ value, onChange }) {
 
 export default function WorkerApply() {
   const [form, setForm] = useState({
-    fullName: '', phone: '', neighborhood: '', bio: '',
+    fullName: '', phone: '', neighborhood: '', bio: '', pin: '',
     languageLevels: [], tasks: [], workType: [], schedule: [], priceFdj: '',
   })
   const [step, setStep] = useState('form')
@@ -76,6 +76,11 @@ export default function WorkerApply() {
     setError('')
     if (!form.fullName.trim() || !form.phone.trim()) {
       setError('Nom et téléphone sont obligatoires.')
+      return
+    }
+
+    if (!/^\d{4}$/.test(form.pin)) {
+      setError('Le code PIN doit être exactement 4 chiffres.')
       return
     }
     setLoading(true)
@@ -148,10 +153,29 @@ export default function WorkerApply() {
                 <input className="form-control" style={{ borderRadius: 10 }}
                   value={form.neighborhood} onChange={e => set('neighborhood', e.target.value)} />
               </div>
-              <div className="mb-0">
+              <div className="mb-3">
                 <label className="form-label small fw-bold">Présentation (optionnel)</label>
                 <textarea className="form-control" rows={3} style={{ borderRadius: 10 }}
                   value={form.bio} onChange={e => set('bio', e.target.value)} />
+              </div>
+              <div className="mb-0">
+                <label className="form-label small fw-bold">Code PIN à 4 chiffres *</label>
+                <input
+                  className="form-control"
+                  style={{ borderRadius: 10, maxWidth: 140, letterSpacing: '0.4em', fontSize: '1.2rem' }}
+                  type="password"
+                  inputMode="numeric"
+                  maxLength={4}
+                  pattern="\d{4}"
+                  placeholder="••••"
+                  value={form.pin}
+                  onChange={e => set('pin', e.target.value.replace(/\D/g, '').slice(0, 4))}
+                  autoComplete="new-password"
+                  required
+                />
+                <div className="form-text" style={{ fontSize: '0.8rem' }}>
+                  Ce code vous permettra de vous connecter sur <strong>Mon Espace</strong> pour mettre à jour votre disponibilité.
+                </div>
               </div>
             </div>
 

@@ -1,6 +1,7 @@
 // api/workers/[id].js
 import { cors } from '../../lib/cors.js'
 import { requireAdmin } from '../../lib/auth.js'
+import { hashPin } from '../../lib/workerAuth.js'
 import { prisma } from '../../lib/prisma.js'
 
 const WORKER_FIELDS = [
@@ -77,6 +78,9 @@ export default async function handler(req, res) {
     try {
       const prev = await prisma.worker.findUnique({ where: { id }, select: { available: true, fullName: true } })
       const data = pickWorkerFields(req.body)
+      if (req.body.pin && /^\d{4}$/.test(req.body.pin)) {
+        data.pinHash = await hashPin(req.body.pin)
+      }
       const worker = await prisma.worker.update({ where: { id }, data })
 
       if (data.available === true && prev && !prev.available) {
