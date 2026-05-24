@@ -1,10 +1,12 @@
 export const TASKS = [
-  { slug: 'menage',    label: 'Ménage général',   icon: '🧹' },
-  { slug: 'enfants',   label: "Garde d'enfants",  icon: '👶' },
-  { slug: 'cuisine',   label: 'Cuisine',           icon: '🍳' },
-  { slug: 'repassage', label: 'Repassage',         icon: '👕' },
-  { slug: 'courses',   label: 'Courses',           icon: '🛒' },
-  { slug: 'jardinage', label: 'Jardinage',         icon: '🌿' },
+  { slug: 'menage',          label: 'Ménage général',    icon: '🧹' },
+  { slug: 'enfants',         label: "Garde d'enfants",   icon: '👶' },
+  { slug: 'cuisine',         label: 'Cuisine',            icon: '🍳' },
+  { slug: 'repassage',       label: 'Repassage',          icon: '👕' },
+  { slug: 'courses',         label: 'Courses',            icon: '🛒' },
+  { slug: 'jardinage',       label: 'Jardinage',          icon: '🌿' },
+  { slug: 'gardien',         label: 'Gardien',            icon: '🔒' },
+  { slug: 'lavage-voiture',  label: 'Lavage de voiture',  icon: '🚗' },
 ]
 
 export const NEIGHBORHOODS = [
@@ -47,13 +49,15 @@ export const LANGUAGE_LEVELS = [
 ]
 
 export const VERIFIED_SKILLS = [
-  { slug: 'menage',    label: 'Ménage',           icon: '🧹' },
-  { slug: 'enfants',   label: "Garde d'enfants",  icon: '👶' },
-  { slug: 'cuisine',   label: 'Cuisine',           icon: '🍳' },
-  { slug: 'repassage', label: 'Repassage',         icon: '👕' },
-  { slug: 'courses',   label: 'Courses',           icon: '🛒' },
-  { slug: 'jardinage', label: 'Jardinage',         icon: '🌿' },
-  { slug: 'seniors',   label: 'Soins seniors',     icon: '🧓' },
+  { slug: 'menage',         label: 'Ménage',            icon: '🧹' },
+  { slug: 'enfants',        label: "Garde d'enfants",   icon: '👶' },
+  { slug: 'cuisine',        label: 'Cuisine',            icon: '🍳' },
+  { slug: 'repassage',      label: 'Repassage',          icon: '👕' },
+  { slug: 'courses',        label: 'Courses',            icon: '🛒' },
+  { slug: 'jardinage',      label: 'Jardinage',          icon: '🌿' },
+  { slug: 'seniors',        label: 'Soins seniors',      icon: '🧓' },
+  { slug: 'gardien',        label: 'Gardien',            icon: '🔒' },
+  { slug: 'lavage-voiture', label: 'Lavage de voiture',  icon: '🚗' },
 ]
 
 export const SERVICE_CATEGORIES = TASKS.map(t => ({
@@ -61,5 +65,6 @@ export const SERVICE_CATEGORIES = TASKS.map(t => ({
   defaultPrice: {
     menage: 30000, enfants: 40000, cuisine: 35000,
     repassage: 25000, courses: 20000, jardinage: 20000,
+    gardien: 45000, 'lavage-voiture': 25000,
   }[t.slug],
 }))
