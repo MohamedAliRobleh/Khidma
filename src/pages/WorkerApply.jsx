@@ -1,8 +1,75 @@
 // src/pages/WorkerApply.jsx
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { TASKS, WORK_TYPES, SCHEDULE_OPTIONS, LANGUAGES, LANGUAGE_LEVELS } from '../utils/constants'
+
+function PhotoUploadPublic({ photoUrl, onUpload }) {
+  const [status, setStatus] = useState(null)
+  const inputRef = useRef()
+
+  const handleFile = async e => {
+    const file = e.target.files[0]
+    if (!file) return
+    if (file.size > 5 * 1024 * 1024) { setStatus('toobig'); return }
+    setStatus('uploading')
+    const reader = new FileReader()
+    reader.onloadend = async () => {
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: reader.result }),
+        })
+        if (!res.ok) throw new Error()
+        const { url, publicId } = await res.json()
+        onUpload({ url, publicId })
+        setStatus('done')
+      } catch {
+        setStatus('error')
+      }
+    }
+    reader.readAsDataURL(file)
+  }
+
+  return (
+    <div className="d-flex align-items-center gap-4">
+      <div
+        onClick={() => inputRef.current?.click()}
+        style={{
+          width: 96, height: 96, borderRadius: '50%', cursor: 'pointer', flexShrink: 0,
+          background: photoUrl ? 'transparent' : 'var(--bg-secondary)',
+          border: `2px dashed ${photoUrl ? 'var(--primary)' : 'var(--border)'}`,
+          overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >
+        {photoUrl ? (
+          <img src={photoUrl} alt="Photo de profil" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          <div style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.78rem', padding: '0.5rem', lineHeight: 1.3 }}>
+            📷<br/>Ajouter<br/>une photo
+          </div>
+        )}
+      </div>
+      <div>
+        <button
+          type="button"
+          className="btn btn-sm btn-outline-secondary"
+          style={{ borderRadius: 8 }}
+          onClick={() => inputRef.current?.click()}
+        >
+          {photoUrl ? 'Changer la photo' : 'Choisir une photo'}
+        </button>
+        <div className="form-text small mt-1">JPG, PNG · max 5 Mo · recommandé</div>
+        {status === 'uploading' && <div className="small text-muted mt-1">Upload en cours…</div>}
+        {status === 'done'      && <div className="small text-success mt-1">✓ Photo ajoutée</div>}
+        {status === 'error'     && <div className="small text-danger mt-1">Erreur — réessayez</div>}
+        {status === 'toobig'    && <div className="small text-danger mt-1">Fichier trop grand (max 5 Mo)</div>}
+      </div>
+      <input ref={inputRef} type="file" accept="image/*" className="d-none" onChange={handleFile} />
+    </div>
+  )
+}
 
 function LanguageSelector({ value, onChange }) {
   const add = lang => {
@@ -59,6 +126,7 @@ function LanguageSelector({ value, onChange }) {
 export default function WorkerApply() {
   const [form, setForm] = useState({
     fullName: '', phone: '', neighborhood: '', bio: '', pin: '',
+    photoUrl: '', cloudinaryId: '',
     languageLevels: [], tasks: [], workType: [], schedule: [], priceFdj: '',
   })
   const [step, setStep] = useState('form')
@@ -138,6 +206,15 @@ export default function WorkerApply() {
             {/* Identity */}
             <div className="card-khidma p-4 mb-4">
               <h6 className="fw-bold mb-3">Informations personnelles</h6>
+
+              <div className="mb-4">
+                <label className="form-label small fw-bold d-block mb-3">Photo de profil</label>
+                <PhotoUploadPublic
+                  photoUrl={form.photoUrl}
+                  onUpload={({ url, publicId }) => { set('photoUrl', url); set('cloudinaryId', publicId) }}
+                />
+              </div>
+
               <div className="mb-3">
                 <label className="form-label small fw-bold">Nom complet *</label>
                 <input className="form-control" style={{ borderRadius: 10 }}

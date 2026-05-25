@@ -4,7 +4,7 @@ import { prisma } from '../../lib/prisma.js'
 import { hashPin, verifyPin, createWorkerToken } from '../../lib/workerAuth.js'
 
 const APPLY_FIELDS = [
-  'fullName', 'phone', 'neighborhood', 'bio',
+  'fullName', 'phone', 'neighborhood', 'bio', 'photoUrl', 'cloudinaryId',
   'languageLevels', 'tasks', 'workType', 'schedule', 'priceFdj',
 ]
 

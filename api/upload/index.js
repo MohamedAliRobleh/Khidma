@@ -1,6 +1,5 @@
 // api/upload/index.js
 import { cors } from '../../lib/cors.js'
-import { requireAdmin } from '../../lib/auth.js'
 import { v2 as cloudinary } from 'cloudinary'
 
 cloudinary.config({
@@ -12,14 +11,20 @@ cloudinary.config({
 export default async function handler(req, res) {
   if (cors(req, res)) return
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
-  if (!(await requireAdmin(req, res))) return
 
-  const { data } = req.body
+  const { data, folder: reqFolder } = req.body
   if (!data) return res.status(400).json({ error: 'Image data manquante' })
 
+  // Admin uploads go to khidma/, public self-registration goes to khidma/applications/
+  const auth = req.headers['authorization']
+  const isAdmin = auth?.startsWith('Bearer ') && await (async () => {
+    try { const { verifyToken } = await import('../../lib/auth.js'); return verifyToken(auth.slice(7)) } catch { return false }
+  })()
+
   try {
+    const uploadFolder = isAdmin ? 'khidma' : 'khidma/applications'
     const result = await cloudinary.uploader.upload(data, {
-      folder: 'khidma',
+      folder: uploadFolder,
       transformation: [{ width: 400, height: 400, crop: 'fill', gravity: 'face' }],
     })
     res.json({ url: result.secure_url, publicId: result.public_id })
